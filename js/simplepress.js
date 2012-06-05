@@ -31,8 +31,8 @@ var SimplePress = (function ( win, $ ) {
 
 	// Internals
 	_.prototype = {
-		win: win,
 		jQuery: $,
+		win: this.jQuery( win ),
 		press: this.jQuery('.press'),
 		mask: this.jQuery('.press .mask'),
 		slide: this.jQuery('.press .mask .slide'),
@@ -49,6 +49,7 @@ var SimplePress = (function ( win, $ ) {
 			settings = settings || {},
 			stamp = self.stamp,
 			press = self.press,
+			mask = self.mask,
 			slide = self.slide;
 
 		if ( settings ) {
@@ -61,6 +62,31 @@ var SimplePress = (function ( win, $ ) {
 				 	'height',
 				]
 			);
+			options.pressDimensions['position'] = 'relative';
+			options.pressDimensions['overflow'] = 'hidden';
+			// Space betweem slides
+			options.slideSpace = (function ( defaultValue ) {
+				var output = defaultValue;
+				var option = core.object.selectProperty( settings.slide, [
+					'spaceBetween',
+				]);
+
+				if ( option ) {
+					output = option[ 'spaceBetween' ];
+				}
+
+				return output;
+			} ( 10 ));
+			// Mask dimensions based on slide
+			options.maskDimensions = core.object.selectProperty(
+				settings.slide, [
+					'width',
+				]
+			);
+			options.maskDimensions['minWidth'] = ( options.maskDimensions.width.replace('px', '') + options.slideSpace ) * slide.length;
+			options.maskDimensions['height'] = '100%';
+			options.maskDimensions['position'] = 'relative';
+			options.maskDimensions['overflow'] = 'hidden';
 			// Dimensions of slide
 			options.slideDimensions = core.object.selectProperty(
 				settings.slide, [
@@ -68,10 +94,14 @@ var SimplePress = (function ( win, $ ) {
 					'height'
 				]
 			);
+			options.slideDimensions['float'] = 'left';
+			options.slideDimensions['margin'] = '0 ' + options.slideSpace + 'px';
 
-			if ( options.pressDimensions && options.slideDimensions ) {
+			if ( options.pressDimensions && options.maskDimensions && options.slideDimensions ) {
 				// Add style to press
 				press.css( options.pressDimensions );
+				// Add style to mask based on slide
+				mask.css( options.maskDimensions );
 				// Add style to slide
 				slide.css( options.slideDimensions );
 

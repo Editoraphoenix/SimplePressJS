@@ -4,11 +4,12 @@ $(function () {
 	SimplePress.start({
 		holder: {
 			width: '100%',
-			height: '600px',
+			height: '630px',
 		},
 		slide: { 
 			width: '700px',
-			height: '500px',
+			height: '600px',
+			spaceBetween: 200,
 		}
 	});
 });
