@@ -2,7 +2,13 @@
 
 $(function () {
 	SimplePress.start({
-		width: '700px',
-		height: '400px',
+		holder: {
+			width: '100%',
+			height: '600px',
+		},
+		slide: { 
+			width: '700px',
+			height: '500px',
+		}
 	});
 });

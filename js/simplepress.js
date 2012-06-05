@@ -1,6 +1,8 @@
-/* Author: kaique.developer@gmail.com */
-
 var SimplePress = (function ( win, $ ) {
+	/*
+		Make presentations using SimplePress, easy and fastly.
+		@author <a href="mailto:kaique.developer@gmail.com">kaique.developer@gmail.com</a>
+	*/
 	var _ = function () {};
 
 	var core = {
@@ -8,6 +10,10 @@ var SimplePress = (function ( win, $ ) {
 	};
 
 	core.object.selectProperty = function ( target, selections ) {
+		/*
+			Select itens in object, by key in the @array: selections,
+			using the @variable: target.
+		*/
 		var output = {};
 
 		if ( target && selections ) {
@@ -23,27 +29,53 @@ var SimplePress = (function ( win, $ ) {
 		return output;
 	};
 
-
 	// Internals
 	_.prototype = {
-		self: this,
 		win: win,
 		jQuery: $,
-		press: [],	
+		press: this.jQuery('.press'),
+		mask: this.jQuery('.press .mask'),
+		slide: this.jQuery('.press .mask .slide'),
+		stamp: this.jQuery('.stamp'),
 	};
 
 	_.prototype.start = function ( settings ) {
-		var output = [],
+		/*
+			Start behavior of presentation
+		*/
+		var output = false,
+			self = this,
+			options = {},
 			settings = settings || {},
-			press = $('.press');
+			stamp = self.stamp,
+			press = self.press,
+			slide = self.slide;
 
 		if ( settings ) {
-			if ( 'width' in settings && 'height' in settings ) {
-				var selectedPropertys = core.object.selectProperty( settings, [ 'width', 'height']);
+			// Apply lettering js 
+			stamp.lettering();
+			// Demensions of presentation
+			options.pressDimensions = core.object.selectProperty( 
+				settings.holder, [
+					'width', 
+				 	'height',
+				]
+			);
+			// Dimensions of slide
+			options.slideDimensions = core.object.selectProperty(
+				settings.slide, [
+					'width',
+					'height'
+				]
+			);
 
-				press.css( selectedPropertys );
+			if ( options.pressDimensions && options.slideDimensions ) {
+				// Add style to press
+				press.css( options.pressDimensions );
+				// Add style to slide
+				slide.css( options.slideDimensions );
 
-				_.prototype.press = output = press;
+				output = true;
 			}
 		}
 
