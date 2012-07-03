@@ -124,7 +124,6 @@ var SimplePress = (function ( win, $ ) {
                     } if ( slideCurrentPointer <= 0 ) {
                         slideCurrentPointer = 0;    
                     } 
-                    console.log( slideCurrentPointer );
                 });
                 
                 controls.find('.next').on('click', function () {
@@ -139,7 +138,14 @@ var SimplePress = (function ( win, $ ) {
                     }
                     console.log( slideCurrentPointer );
                 });
-                console.log( parseInt( mask.css( 'left' ).split('px')[0] ) + 100 );
+
+                $('html').on('keypress', function ( e ) {
+                	if ( e.keyCode === 98 ) {
+                		controls.find('.back').delay( 700 ).trigger('click');
+                	} if ( e.keyCode === 110 ) {
+                		controls.find('.next').delay( 700 ).trigger('click');
+                	}
+                });
 
 				output = true;
 			}
